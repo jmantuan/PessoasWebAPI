@@ -23,7 +23,7 @@ namespace WebApp.Controllers
         public IActionResult Get()
         {
             List<Pessoa> model = _service.GetPessoas();
-            List<PessoaModel> outputModel = ToOutputModel(model);
+            List<PessoaModel> outputModel = ModeloSaida(model);
 
             return Ok(outputModel);
         }
@@ -37,7 +37,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var outputModel = ToOutputModel(model);
+            var outputModel = ModeloSaida(model);
             return Ok(outputModel);
         }
 
@@ -49,10 +49,10 @@ namespace WebApp.Controllers
                 return BadRequest();
             }
 
-            Pessoa model = ToDomainModel(inputModel);
+            Pessoa model = ModeloEntrada(inputModel);
             _service.AddPessoa(model);
 
-            var outputModel = ToOutputModel(model);
+            var outputModel = ModeloSaida(model);
             return CreatedAtRoute("GetPessoa", new { Id = outputModel.Id }, outputModel);
         }
 
@@ -69,7 +69,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            Pessoa model = ToDomainModel(inputModel);
+            Pessoa model = ModeloEntrada(inputModel);
             _service.UpdatePessoa(model);
 
             return NoContent();
@@ -90,25 +90,9 @@ namespace WebApp.Controllers
 
         // Mapeamento para a API
 
-        private PessoaModel ToOutputModel(Pessoa pessoa)
+        private PessoaModel ModeloSaida(Pessoa model)
         {
             return new PessoaModel
-            {
-                Id = pessoa.Id,
-                Nome = pessoa.Nome,
-                Sobrenome = pessoa.Sobrenome,
-                Email = pessoa.Email
-            };
-        }
-
-        private List<PessoaModel> ToOutputModel(List<Pessoa> pessoas)
-        {
-            return pessoas.Select(p => ToOutputModel(p)).ToList();
-        }
-
-        private Pessoa ToDomainModel(PessoaModel model)
-        {
-            return new Pessoa
             {
                 Id = model.Id,
                 Nome = model.Nome,
@@ -117,9 +101,14 @@ namespace WebApp.Controllers
             };
         }
 
-        private PessoaModel ToInputModel(Pessoa model)
+        private List<PessoaModel> ModeloSaida(List<Pessoa> pessoas)
         {
-            return new PessoaModel
+            return pessoas.Select(p => ModeloSaida(p)).ToList();
+        }
+
+        private Pessoa ModeloEntrada(PessoaModel model)
+        {
+            return new Pessoa
             {
                 Id = model.Id,
                 Nome = model.Nome,
