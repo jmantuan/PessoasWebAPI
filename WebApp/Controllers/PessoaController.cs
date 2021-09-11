@@ -4,6 +4,7 @@ using WebApp.Services;
 using System.Collections.Generic;
 using System.Linq;
 using WebApp.Context;
+using Microsoft.AspNetCore.Cors;
 
 namespace WebApp.Controllers
 {
@@ -12,7 +13,6 @@ namespace WebApp.Controllers
     public class PessoasController : ControllerBase
     {
         private readonly IPessoaService _service;
-        private AppDbContext _contexto;
 
         public PessoasController(IPessoaService service)
         {

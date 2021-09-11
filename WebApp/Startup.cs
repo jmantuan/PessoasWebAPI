@@ -26,9 +26,10 @@ namespace WebApp
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+ 
+
             services.AddControllers();
             services.AddDbContext<AppDbContext>(option => 
                 option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -36,7 +37,6 @@ namespace WebApp
             services.AddScoped<IPessoaService, PessoaService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -47,6 +47,11 @@ namespace WebApp
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors(x => x
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(origin => true)
+                    .AllowCredentials());
 
             app.UseAuthorization();
 
