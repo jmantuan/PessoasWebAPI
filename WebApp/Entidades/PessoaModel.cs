@@ -2,7 +2,7 @@
 
 namespace WebApp.Entidades
 {
-    public class Pessoa
+    public class PessoaModel
     {
         [Key]
         public int Id { get; set; }
